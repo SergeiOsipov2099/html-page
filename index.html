@@ -229,6 +229,16 @@
     </div>
 
     <script>
+        // Функция для получения параметров из URL
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Получаем chat_id и user_id из URL
+        const chatId = getUrlParameter('chat_id');
+        const userId = getUrlParameter('user_id');
+
         // Инициализация Telegram Web App
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
@@ -317,6 +327,10 @@
             for (let [key, value] of formData.entries()) {
                 data[key] = value.trim();
             }
+            
+            // Добавляем chat_id и user_id
+            if (chatId) data.chat_id = chatId;
+            if (userId) data.user_id = userId;
             
             // Валидация
             const errors = validateForm(data);
