@@ -223,8 +223,7 @@
         </form>
         
         <div class="success-message" id="success-message">
-            ✅ Анкета успешно отправлена!<br>
-            Окно закроется через несколько секунд...
+            ✅ Анкета успешно отправлена!
         </div>
     </div>
 
@@ -305,7 +304,7 @@
         }
 
         // Обработка отправки формы
-        document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Скрываем все ошибки
@@ -329,32 +328,35 @@
                 return;
             }
             
-           // Показываем загрузку
-document.getElementById('loading').style.display = 'block';
-document.querySelector('.submit-btn').disabled = true;
+            // Показываем загрузку
+            document.getElementById('loading').style.display = 'block';
+            document.querySelector('.submit-btn').disabled = true;
 
-// Отправляем данные и НЕ ЖДЕМ ответа
-fetch('https://serg123.app.n8n.cloud/webhook/survey-submit', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data)
-}).catch(error => {
-    console.log('Ошибка отправки (игнорируем):', error);
-});
+            // Отправляем данные и НЕ ЖДЕМ ответа
+            fetch('https://serg123.app.n8n.cloud/webhook/survey-submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).catch(error => {
+                console.log('Ошибка отправки (игнорируем):', error);
+            });
 
-// Сразу показываем успех
-setTimeout(() => {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('surveyForm').style.display = 'none';
-    document.getElementById('success-message').style.display = 'block';
-    
-    // Закрываем сразу после показа успешного сообщения
-    if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.close();
-    }
-}, 1000); // Можно даже уменьшить до 500мс если нужно еще быстрее
+            // Показываем успех и сразу закрываем
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('surveyForm').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+                
+                // Закрываем через 500мс после показа сообщения
+                setTimeout(() => {
+                    if (window.Telegram && window.Telegram.WebApp) {
+                        window.Telegram.WebApp.close();
+                    }
+                }, 500);
+            }, 1000);
+        });
 
         // Убираем ошибки при вводе
         document.querySelectorAll('input, textarea, select').forEach(field => {
