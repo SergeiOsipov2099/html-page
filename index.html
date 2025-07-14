@@ -223,7 +223,8 @@
         </form>
         
         <div class="success-message" id="success-message">
-            ✅ Анкета успешно отправлена!
+            ✅ Анкета успешно отправлена!<br>
+            Можете закрыть эту страницу и начать пользоваться ботом
         </div>
     </div>
 
@@ -343,21 +344,11 @@
                 console.log('Ошибка отправки (игнорируем):', error);
             });
 
-            // Показываем успех и сразу закрываем
+            // Показываем успех сразу
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('surveyForm').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
-                
-                // Закрываем через 500мс после показа сообщения
-                setTimeout(() => {
-                    if (window.Telegram && window.Telegram.WebApp) {
-                        window.Telegram.WebApp.close();
-                    } else {
-                        // Резервный вариант для браузера
-                        alert('Анкета отправлена! Можете закрыть это окно.');
-                    }
-                }, 500);
             }, 1000);
         });
 
