@@ -329,35 +329,32 @@
                 return;
             }
             
-            // Показываем загрузку
-            document.getElementById('loading').style.display = 'block';
-            document.querySelector('.submit-btn').disabled = true;
-            
-            // Отправляем данные и НЕ ЖДЕМ ответа
-            fetch('https://serg123.app.n8n.cloud/webhook/survey-submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            }).catch(error => {
-                console.log('Ошибка отправки (игнорируем):', error);
-            });
-            
-            // Сразу показываем успех
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('surveyForm').style.display = 'none';
-                document.getElementById('success-message').style.display = 'block';
-                
-                // Закрываем через 3 секунды
-                setTimeout(() => {
-                    if (window.Telegram && window.Telegram.WebApp) {
-                        window.Telegram.WebApp.close();
-                    }
-                }, 3000);
-            }, 1000);
-        });
+           // Показываем загрузку
+document.getElementById('loading').style.display = 'block';
+document.querySelector('.submit-btn').disabled = true;
+
+// Отправляем данные и НЕ ЖДЕМ ответа
+fetch('https://serg123.app.n8n.cloud/webhook/survey-submit', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+}).catch(error => {
+    console.log('Ошибка отправки (игнорируем):', error);
+});
+
+// Сразу показываем успех
+setTimeout(() => {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('surveyForm').style.display = 'none';
+    document.getElementById('success-message').style.display = 'block';
+    
+    // Закрываем сразу после показа успешного сообщения
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.close();
+    }
+}, 1000); // Можно даже уменьшить до 500мс если нужно еще быстрее
 
         // Убираем ошибки при вводе
         document.querySelectorAll('input, textarea, select').forEach(field => {
